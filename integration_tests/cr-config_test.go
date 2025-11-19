@@ -120,7 +120,7 @@ spec:
 		backstageName := createAndReconcileBackstage(ctx, ns, bs, "")
 
 		Eventually(func(g Gomega) {
-			deploy := &appsv1.Deployment{}
+			deploy := &appsv1.StatefulSet{}
 			err := k8sClient.Get(ctx, types.NamespacedName{Namespace: ns, Name: model.DeploymentName(backstageName)}, deploy)
 			g.Expect(err).ShouldNot(HaveOccurred())
 
@@ -231,7 +231,7 @@ spec:
 
 		Eventually(func(g Gomega) {
 			By("creating Deployment with replicas=1 by default")
-			deploy := &appsv1.Deployment{}
+			deploy := &appsv1.StatefulSet{}
 			err := k8sClient.Get(ctx, types.NamespacedName{Namespace: ns, Name: model.DeploymentName(backstageName)}, deploy)
 			g.Expect(err).To(Not(HaveOccurred()))
 			g.Expect(deploy.Spec.Replicas).To(HaveValue(BeEquivalentTo(1)))
@@ -259,7 +259,7 @@ spec:
 
 		Eventually(func(g Gomega) {
 
-			deploy := &appsv1.Deployment{}
+			deploy := &appsv1.StatefulSet{}
 			err = k8sClient.Get(ctx, types.NamespacedName{Namespace: ns, Name: model.DeploymentName(backstageName)}, deploy)
 			g.Expect(err).To(Not(HaveOccurred()))
 			g.Expect(deploy.Spec.Replicas).To(HaveValue(BeEquivalentTo(2)))
@@ -280,8 +280,8 @@ spec:
 		backstageName := createAndReconcileBackstage(ctx, ns, bs2.Spec, "")
 
 		Eventually(func(g Gomega) {
-			By("creating Deployment ")
-			deploy := &appsv1.Deployment{}
+			By("creating deployment ")
+			deploy := &appsv1.StatefulSet{}
 			err := k8sClient.Get(ctx, types.NamespacedName{Namespace: ns, Name: model.DeploymentName(backstageName)}, deploy)
 			g.Expect(err).To(Not(HaveOccurred()))
 			var bscontainer corev1.Container

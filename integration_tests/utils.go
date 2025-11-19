@@ -9,7 +9,6 @@ import (
 
 	"github.com/redhat-developer/rhdh-operator/pkg/model"
 	appsv1 "k8s.io/api/apps/v1"
-
 	"k8s.io/apimachinery/pkg/util/yaml"
 
 	"k8s.io/client-go/kubernetes"
@@ -125,7 +124,7 @@ func ReadYamlFile(path string, object interface{}) error {
 	return ReadYaml(b, object)
 }
 
-func backstageContainerName(deploy *appsv1.Deployment) string {
+func backstageContainerName(deploy *appsv1.StatefulSet) string {
 	// backstage-backend
 	cIndex := model.BackstageContainerIndex(deploy)
 	return deploy.Spec.Template.Spec.Containers[cIndex].Name

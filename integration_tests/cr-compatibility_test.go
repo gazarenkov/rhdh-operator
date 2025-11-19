@@ -84,7 +84,7 @@ var _ = When("testing API version compatibility", func() {
 
 		By("verifying v1alpha3 deployment is created")
 		Eventually(func(g Gomega) {
-			deploy := &appsv1.Deployment{}
+			deploy := &appsv1.StatefulSet{}
 			err := k8sClient.Get(ctx, types.NamespacedName{
 				Namespace: ns,
 				Name:      model.DeploymentName(backstageNameV3),
@@ -134,7 +134,7 @@ var _ = When("testing API version compatibility", func() {
 
 		By("verifying v1alpha4 deployment is created")
 		Eventually(func(g Gomega) {
-			deploy := &appsv1.Deployment{}
+			deploy := &appsv1.StatefulSet{}
 			err := k8sClient.Get(ctx, types.NamespacedName{
 				Namespace: ns,
 				Name:      model.DeploymentName(backstageNameV4),
@@ -147,7 +147,7 @@ var _ = When("testing API version compatibility", func() {
 		By("verifying both v1alpha3 and v1alpha4 resources coexist")
 		// verify both deployments exist and have correct specs
 		Eventually(func(g Gomega) {
-			deployV3 := &appsv1.Deployment{}
+			deployV3 := &appsv1.StatefulSet{}
 			err := k8sClient.Get(ctx, types.NamespacedName{
 				Namespace: ns,
 				Name:      model.DeploymentName(backstageNameV3),
@@ -156,7 +156,7 @@ var _ = When("testing API version compatibility", func() {
 			g.Expect(deployV3.Spec.Replicas).ToNot(BeNil())
 			g.Expect(*deployV3.Spec.Replicas).To(Equal(int32(1)))
 
-			deployV4 := &appsv1.Deployment{}
+			deployV4 := &appsv1.StatefulSet{}
 			err = k8sClient.Get(ctx, types.NamespacedName{
 				Namespace: ns,
 				Name:      model.DeploymentName(backstageNameV4),
