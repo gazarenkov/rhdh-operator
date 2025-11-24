@@ -1,3 +1,5 @@
+This should create Backstage CR with persistent cache for dynamic plugins and StatefulSet with 2 replicas.
+
 1. Make sure you have no deplyed operator (especially on non-default, 'rhdh-operator' namespace). If so, uninstall it first.
 
 2. Deploy Operator on your cluster. Controller will be deployed to `rhdh-operator` namespace by default.
@@ -5,7 +7,7 @@
 make deploy
 ````
 
-3. Make sure that the patch like this is applied to your Custom Resource definition to enable persistent storage for dynamic plugins caching:
+3. Make sure that the patch like this is applied to your Backstage Custom Resource definition to enable persistent storage for dynamic plugins caching:
 ````yaml
 spec:
   deployment:
