@@ -1,0 +1,308 @@
+
+======= Auto-resolving OCI package oci://registry.access.redhat.com/rhdh/backstage-community-plugin-scaffolder-backend-module-servicenow@sha256:3ff2122f96463ec0a9c4cfee71e4be0333b8cd82e086c9433c8c9c3a45ac3eb5 to use plugin path: backstage-community-plugin-scaffolder-backend-module-servicenow
+
+======= Adding new dynamic plugin configuration for version `sha256:3ff2122f96463ec0a9c4cfee71e4be0333b8cd82e086c9433c8c9c3a45ac3eb5` of oci://registry.access.redhat.com/rhdh/backstage-community-plugin-scaffolder-backend-module-servicenow:!backstage-community-plugin-scaffolder-backend-module-servicenow
+
+======= No plugin path specified for oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend@sha256:05f14d7c6cc41dd50cdb0adafa97137593caa4c218563fcc00bb30d36ad6bf2f, auto-detecting from OCI manifest
+    ==> Checking if image exists in registry.access.redhat.com/rhdh/...
+    ==> Image not found in registry.access.redhat.com/rhdh/, falling back to quay.io/rhdh/
+    ==> Using fallback image: quay.io/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend@sha256:05f14d7c6cc41dd50cdb0adafa97137593caa4c218563fcc00bb30d36ad6bf2f
+
+======= Auto-resolving OCI package oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend@sha256:05f14d7c6cc41dd50cdb0adafa97137593caa4c218563fcc00bb30d36ad6bf2f to use plugin path: red-hat-developer-hub-backstage-plugin-orchestrator-backend
+
+======= Adding new dynamic plugin configuration for version `sha256:05f14d7c6cc41dd50cdb0adafa97137593caa4c218563fcc00bb30d36ad6bf2f` of oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend:!red-hat-developer-hub-backstage-plugin-orchestrator-backend
+
+======= No plugin path specified for oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets@sha256:6e12decf7664c5c3410b1c7308eaa6daabeabbbc7baae5beddcdf52afdb702f8, auto-detecting from OCI manifest
+    ==> Checking if image exists in registry.access.redhat.com/rhdh/...
+    ==> Image not found in registry.access.redhat.com/rhdh/, falling back to quay.io/rhdh/
+    ==> Using fallback image: quay.io/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets@sha256:6e12decf7664c5c3410b1c7308eaa6daabeabbbc7baae5beddcdf52afdb702f8
+
+======= Auto-resolving OCI package oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets@sha256:6e12decf7664c5c3410b1c7308eaa6daabeabbbc7baae5beddcdf52afdb702f8 to use plugin path: red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets
+
+======= Adding new dynamic plugin configuration for version `sha256:6e12decf7664c5c3410b1c7308eaa6daabeabbbc7baae5beddcdf52afdb702f8` of oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets:!red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets
+
+======= No plugin path specified for oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator@sha256:7355b244d463187b11174b091b10235167ffc6fbd9466ec3cff0a8b5b04d6e98, auto-detecting from OCI manifest
+    ==> Checking if image exists in registry.access.redhat.com/rhdh/...
+    ==> Image not found in registry.access.redhat.com/rhdh/, falling back to quay.io/rhdh/
+    ==> Using fallback image: quay.io/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator@sha256:7355b244d463187b11174b091b10235167ffc6fbd9466ec3cff0a8b5b04d6e98
+
+======= Auto-resolving OCI package oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator@sha256:7355b244d463187b11174b091b10235167ffc6fbd9466ec3cff0a8b5b04d6e98 to use plugin path: red-hat-developer-hub-backstage-plugin-orchestrator
+
+======= Adding new dynamic plugin configuration for version `sha256:7355b244d463187b11174b091b10235167ffc6fbd9466ec3cff0a8b5b04d6e98` of oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator:!red-hat-developer-hub-backstage-plugin-orchestrator
+
+======= No plugin path specified for oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator@sha256:6a138dd4c6bb7b98d7af58657395fc3ef3b96768276a2d65d9a7ef5fda52f2b5, auto-detecting from OCI manifest
+    ==> Checking if image exists in registry.access.redhat.com/rhdh/...
+    ==> Image not found in registry.access.redhat.com/rhdh/, falling back to quay.io/rhdh/
+    ==> Using fallback image: quay.io/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator@sha256:6a138dd4c6bb7b98d7af58657395fc3ef3b96768276a2d65d9a7ef5fda52f2b5
+
+======= Auto-resolving OCI package oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator@sha256:6a138dd4c6bb7b98d7af58657395fc3ef3b96768276a2d65d9a7ef5fda52f2b5 to use plugin path: red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator
+
+======= Adding new dynamic plugin configuration for version `sha256:6a138dd4c6bb7b98d7af58657395fc3ef3b96768276a2d65d9a7ef5fda52f2b5` of oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator:!red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator
+
+======= Inheriting version `sha256:6a138dd4c6bb7b98d7af58657395fc3ef3b96768276a2d65d9a7ef5fda52f2b5` and plugin path `red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator` for oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator:!red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator
+
+======= Overriding dynamic plugin configuration oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator:!red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator
+
+======= Inheriting version `sha256:6e12decf7664c5c3410b1c7308eaa6daabeabbbc7baae5beddcdf52afdb702f8` and plugin path `red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets` for oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets:!red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets
+
+======= Overriding dynamic plugin configuration oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets:!red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets
+
+======= Overriding dynamic plugin configuration ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic
+
+======= Overriding dynamic plugin configuration ./dynamic-plugins/dist/backstage-plugin-techdocs
+
+======= Overriding dynamic plugin configuration ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-dynamic-home-page
+
+======= Inheriting version `sha256:7355b244d463187b11174b091b10235167ffc6fbd9466ec3cff0a8b5b04d6e98` and plugin path `red-hat-developer-hub-backstage-plugin-orchestrator` for oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator:!red-hat-developer-hub-backstage-plugin-orchestrator
+
+======= Overriding dynamic plugin configuration oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator:!red-hat-developer-hub-backstage-plugin-orchestrator
+
+======= Inheriting version `sha256:05f14d7c6cc41dd50cdb0adafa97137593caa4c218563fcc00bb30d36ad6bf2f` and plugin path `red-hat-developer-hub-backstage-plugin-orchestrator-backend` for oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend:!red-hat-developer-hub-backstage-plugin-orchestrator-backend
+
+======= Overriding dynamic plugin configuration oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend:!red-hat-developer-hub-backstage-plugin-orchestrator-backend
+
+======= Overriding dynamic plugin configuration ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
+
+======= Overriding dynamic plugin configuration ./dynamic-plugins/dist/backstage-plugin-techdocs-module-addons-contrib
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-analytics-provider-segment
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/backstage-community-plugin-analytics-provider-segment-1.22.2.tgz
+    ==> Removing package archive /dynamic-plugins-root/backstage-community-plugin-analytics-provider-segment-1.22.2.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-analytics-provider-segment
+    ==> Merging plugin-specific configuration
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-scaffolder-backend-module-regex-dynamic
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/backstage-community-plugin-scaffolder-backend-module-regex-dynamic-2.11.0.tgz
+    ==> Removing package archive /dynamic-plugins-root/backstage-community-plugin-scaffolder-backend-module-regex-dynamic-2.11.0.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-scaffolder-backend-module-regex-dynamic
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/backstage-plugin-techdocs
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/backstage-plugin-techdocs-1.16.0.tgz
+    ==> Removing package archive /dynamic-plugins-root/backstage-plugin-techdocs-1.16.0.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/backstage-plugin-techdocs
+    ==> Merging plugin-specific configuration
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-techdocs-module-addons-contrib
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-adoption-insights
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-adoption-insights-0.6.2.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-adoption-insights-0.6.2.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-adoption-insights
+    ==> Merging plugin-specific configuration
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-adoption-insights-backend-dynamic
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-adoption-insights-backend-dynamic-0.6.2.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-adoption-insights-backend-dynamic-0.6.2.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-adoption-insights-backend-dynamic
+    ==> Merging plugin-specific configuration
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-analytics-module-adoption-insights-dynamic
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-analytics-module-adoption-insights-dynamic-0.6.2.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-analytics-module-adoption-insights-dynamic-0.6.2.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-analytics-module-adoption-insights-dynamic
+    ==> Merging plugin-specific configuration
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions-dynamic
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions-dynamic-0.14.3.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions-dynamic-0.14.3.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-catalog-backend-module-extensions-dynamic
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-dynamic-home-page
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-dynamic-home-page-1.10.5.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-dynamic-home-page-1.10.5.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-dynamic-home-page
+    ==> Merging plugin-specific configuration
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-extensions-0.14.3.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-extensions-0.14.3.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions
+    ==> Merging plugin-specific configuration
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic-0.14.3.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic-0.14.3.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-extensions-backend-dynamic
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-floating-action-button
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-global-floating-action-button-1.7.3.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-global-floating-action-button-1.7.3.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-floating-action-button
+    ==> Merging plugin-specific configuration
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-header
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-global-header-1.20.1.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-global-header-1.20.1.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-header
+    ==> Merging plugin-specific configuration
+
+======= Installing dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-quickstart
+    ==> Grabbing package archive through `npm pack`
+    ==> Extracting package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-quickstart-1.8.2.tgz
+    ==> Removing package archive /dynamic-plugins-root/red-hat-developer-hub-backstage-plugin-quickstart-1.8.2.tgz
+    ==> Successfully installed dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-quickstart
+    ==> Merging plugin-specific configuration
+
+======= Installing dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-scaffolder-backend-module-quay:bs_1.45.3__2.14.0!backstage-community-plugin-scaffolder-backend-module-quay
+    ==> Copying image oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-scaffolder-backend-module-quay:bs_1.45.3__2.14.0 to local filesystem
+    ==> WARNING: skipping file containing link outside of the archive: backstage-community-plugin-scaffolder-backend-module-quay/node_modules/.bin/yaml -> /home/runner/work/rhdh-plugin-export-overlays/rhdh-plugin-export-overlays/source-repo/workspaces/quay/plugins/quay-actions/dist-dynamic/node_modules/yaml/bin.mjs
+    ==> Successfully installed dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-scaffolder-backend-module-quay:bs_1.45.3__2.14.0!backstage-community-plugin-scaffolder-backend-module-quay
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-acr
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-keycloak-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-pingidentity-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-scaffolder-relation-processor-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-ocm
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-ocm-backend-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-rbac
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-scaffolder-backend-module-kubernetes-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-tech-radar
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-tech-radar-backend-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-community-plugin-topology
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-org-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-gitlab-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-gitlab-org-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-ldap-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-msgraph-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-kubernetes
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-notifications
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-notifications-backend-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-notifications-backend-module-email-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-azure-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-github-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-gitlab-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-signals
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/backstage-plugin-signals-backend-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-bulk-import-backend-dynamic
+
+======= Skipping disabled dynamic plugin ./dynamic-plugins/dist/roadiehq-scaffolder-backend-module-http-request-dynamic
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-3scale-backend:bs_1.45.3__3.10.0!backstage-community-plugin-3scale-backend
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-argocd-backend:bs_1.45.3__1.0.2!backstage-community-plugin-argocd-backend
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-argocd:bs_1.45.3__2.4.3!backstage-community-plugin-argocd
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-azure-devops-backend:bs_1.45.3__0.23.0!backstage-community-plugin-azure-devops-backend
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-azure-devops:bs_1.45.3__0.23.0!backstage-community-plugin-azure-devops
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-dynatrace:bs_1.45.3__10.12.1!backstage-community-plugin-dynatrace
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-github-actions:bs_1.45.3__0.18.0!backstage-community-plugin-github-actions
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-github-issues:bs_1.45.3__0.16.0!backstage-community-plugin-github-issues
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-jenkins-backend:bs_1.45.3__0.22.0!backstage-community-plugin-jenkins-backend
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-jenkins:bs_1.45.3__0.26.0!backstage-community-plugin-jenkins
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-jfrog-artifactory:bs_1.45.3__1.24.1!backstage-community-plugin-jfrog-artifactory
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-lighthouse:bs_1.45.3__0.16.0!backstage-community-plugin-lighthouse
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-nexus-repository-manager:bs_1.45.3__1.19.4!backstage-community-plugin-nexus-repository-manager
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay-backend:bs_1.45.3__1.10.1!backstage-community-plugin-quay-backend
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-quay:bs_1.45.3__1.28.1!backstage-community-plugin-quay
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-scaffolder-backend-module-sonarqube:bs_1.45.3__2.11.0!backstage-community-plugin-scaffolder-backend-module-sonarqube
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-sonarqube-backend:bs_1.45.3__0.15.0!backstage-community-plugin-sonarqube-backend
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-sonarqube:bs_1.45.3__0.21.0!backstage-community-plugin-sonarqube
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-tekton:bs_1.45.3__3.33.3!backstage-community-plugin-tekton
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-catalog-backend-module-bitbucket-cloud:bs_1.45.3__0.5.5!backstage-plugin-catalog-backend-module-bitbucket-cloud
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-catalog-backend-module-bitbucket-server:bs_1.45.3__0.5.5!backstage-plugin-catalog-backend-module-bitbucket-server
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-scaffolder-backend-module-bitbucket-cloud:bs_1.45.3__0.2.15!backstage-plugin-scaffolder-backend-module-bitbucket-cloud
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-scaffolder-backend-module-bitbucket-server:bs_1.45.3__0.2.15!backstage-plugin-scaffolder-backend-module-bitbucket-server
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-scaffolder-backend-module-gerrit:bs_1.45.3__0.2.15!backstage-plugin-scaffolder-backend-module-gerrit
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/immobiliarelabs-backstage-plugin-gitlab-backend:bs_1.45.3__6.13.0!immobiliarelabs-backstage-plugin-gitlab-backend
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/immobiliarelabs-backstage-plugin-gitlab:bs_1.45.3__6.13.0!immobiliarelabs-backstage-plugin-gitlab
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/pagerduty-backstage-plugin-backend:bs_1.45.3__0.10.1!pagerduty-backstage-plugin-backend
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/pagerduty-backstage-plugin:bs_1.45.3__0.16.4!pagerduty-backstage-plugin
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-backstage-plugin-argo-cd-backend:bs_1.45.3__4.6.0!roadiehq-backstage-plugin-argo-cd-backend
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-backstage-plugin-datadog:bs_1.45.3__2.6.0!roadiehq-backstage-plugin-datadog
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-backstage-plugin-github-insights:bs_1.45.3__3.4.1!roadiehq-backstage-plugin-github-insights
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-backstage-plugin-github-pull-requests:bs_1.45.3__3.6.2!roadiehq-backstage-plugin-github-pull-requests
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-backstage-plugin-jira:bs_1.45.3__2.14.0!roadiehq-backstage-plugin-jira
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-backstage-plugin-security-insights:bs_1.45.3__3.3.1!roadiehq-backstage-plugin-security-insights
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-scaffolder-backend-argocd:bs_1.45.3__1.8.1!roadiehq-scaffolder-backend-argocd
+
+======= Skipping disabled dynamic plugin oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-scaffolder-backend-module-utils:bs_1.45.3__4.1.1!roadiehq-scaffolder-backend-module-utils
+
+======= Skipping disabled dynamic plugin oci://registry.access.redhat.com/rhdh/backstage-community-plugin-scaffolder-backend-module-servicenow@sha256:3ff2122f96463ec0a9c4cfee71e4be0333b8cd82e086c9433c8c9c3a45ac3eb5!backstage-community-plugin-scaffolder-backend-module-servicenow
+======= Skipping disabled dynamic plugin oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-backend@sha256:05f14d7c6cc41dd50cdb0adafa97137593caa4c218563fcc00bb30d36ad6bf2f!red-hat-developer-hub-backstage-plugin-orchestrator-backend
+
+======= Skipping disabled dynamic plugin oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets@sha256:6e12decf7664c5c3410b1c7308eaa6daabeabbbc7baae5beddcdf52afdb702f8!red-hat-developer-hub-backstage-plugin-orchestrator-form-widgets
+
+======= Skipping disabled dynamic plugin oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-orchestrator@sha256:7355b244d463187b11174b091b10235167ffc6fbd9466ec3cff0a8b5b04d6e98!red-hat-developer-hub-backstage-plugin-orchestrator
+
+======= Skipping disabled dynamic plugin oci://registry.access.redhat.com/rhdh/red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator@sha256:6a138dd4c6bb7b98d7af58657395fc3ef3b96768276a2d65d9a7ef5fda52f2b5!red-hat-developer-hub-backstage-plugin-scaffolder-backend-module-orchestrator
+
+======= Cleaning up temporary catalog index directory
+======= Removed lock file: /dynamic-plugins-root/install-dynamic-plugins.lock
+stream closed: EOF for backstage/backstage-bs1-74bdbd4c98-4bvpt (install-dynamic-plugins)

@@ -1,0 +1,82 @@
+
+NO filter 4k
+
+[  1/ 12] 2026-01-05 21:18:41 - Heap Alloc:    13.73 MB, Heap InUse:    16.55 MB, Heap Sys:    26.94 MB
+[  2/ 12] 2026-01-05 21:18:47 - Heap Alloc:    13.78 MB, Heap InUse:    16.62 MB, Heap Sys:    26.94 MB
+[  3/ 12] 2026-01-05 21:18:52 - Heap Alloc:    13.80 MB, Heap InUse:    16.72 MB, Heap Sys:    26.91 MB
+[  4/ 12] 2026-01-05 21:18:57 - Heap Alloc:    13.83 MB, Heap InUse:    16.88 MB, Heap Sys:    26.88 MB
+[  5/ 12] 2026-01-05 21:19:02 - Heap Alloc:    13.89 MB, Heap InUse:    17.03 MB, Heap Sys:    26.88 MB
+[  6/ 12] 2026-01-05 21:19:07 - Heap Alloc:    13.93 MB, Heap InUse:    17.09 MB, Heap Sys:    26.88 MB
+[  7/ 12] 2026-01-05 21:19:12 - Heap Alloc:    13.98 MB, Heap InUse:    17.13 MB, Heap Sys:    26.84 MB
+
+NO filter 5k
+
+[  1/ 12] 2026-01-05 21:46:22 - Heap Alloc:    16.23 MB, Heap InUse:    19.51 MB, Heap Sys:    30.84 MB
+[  2/ 12] 2026-01-05 21:46:27 - Heap Alloc:    16.30 MB, Heap InUse:    19.55 MB, Heap Sys:    30.84 MB
+[  3/ 12] 2026-01-05 21:46:32 - Heap Alloc:    16.38 MB, Heap InUse:    19.65 MB, Heap Sys:    30.84 MB
+[  4/ 12] 2026-01-05 21:46:37 - Heap Alloc:    16.46 MB, Heap InUse:    19.72 MB, Heap Sys:    30.84 MB
+[  5/ 12] 2026-01-05 21:46:42 - Heap Alloc:    16.50 MB, Heap InUse:    19.76 MB, Heap Sys:    30.84 MB
+[  6/ 12] 2026-01-05 21:46:48 - Heap Alloc:    15.58 MB, Heap InUse:    18.46 MB, Heap Sys:    30.88 MB
+[  7/ 12] 2026-01-05 21:46:53 - Heap Alloc:    15.62 MB, Heap InUse:    18.54 MB, Heap Sys:    30.88 MB
+[  8/ 12] 2026-01-05 21:46:58 - Heap Alloc:    15.66 MB, Heap InUse:    18.61 MB, Heap Sys:    30.88 MB
+[  9/ 12] 2026-01-05 21:47:03 - Heap Alloc:    15.70 MB, Heap InUse:    18.66 MB, Heap Sys:    30.88 MB
+[ 10/ 12] 2026-01-05 21:47:08 - Heap Alloc:    15.75 MB, Heap InUse:    18.70 MB, Heap Sys:    30.88 MB
+[ 11/ 12] 2026-01-05 21:47:13 - Heap Alloc:    15.80 MB, Heap InUse:    18.73 MB, Heap Sys:    30.88 MB
+[ 12/ 12] 2026-01-05 21:47:18 - Heap Alloc:    15.86 MB, Heap InUse:    18.77 MB, Heap Sys:    30.88 MB
+
+
+NO filter 6k
+
+[  1/ 12] 2026-01-05 22:16:33 - Heap Alloc:    17.88 MB, Heap InUse:    21.45 MB, Heap Sys:    42.88 MB
+[  2/ 12] 2026-01-05 22:16:38 - Heap Alloc:    17.93 MB, Heap InUse:    21.52 MB, Heap Sys:    42.88 MB
+[  3/ 12] 2026-01-05 22:16:43 - Heap Alloc:    17.98 MB, Heap InUse:    21.57 MB, Heap Sys:    42.88 MB
+[  4/ 12] 2026-01-05 22:16:48 - Heap Alloc:    18.02 MB, Heap InUse:    21.61 MB, Heap Sys:    42.88 MB
+[  5/ 12] 2026-01-05 22:16:53 - Heap Alloc:    18.10 MB, Heap InUse:    21.66 MB, Heap Sys:    42.88 MB
+[  6/ 12] 2026-01-05 22:16:58 - Heap Alloc:    18.16 MB, Heap InUse:    21.75 MB, Heap Sys:    42.88 MB
+[  7/ 12] 2026-01-05 22:17:03 - Heap Alloc:    18.22 MB, Heap InUse:    21.84 MB, Heap Sys:    42.88 MB
+[  8/ 12] 2026-01-05 22:17:09 - Heap Alloc:    18.28 MB, Heap InUse:    21.89 MB, Heap Sys:    42.88 MB
+[  9/ 12] 2026-01-05 22:17:14 - Heap Alloc:    18.35 MB, Heap InUse:    21.95 MB, Heap Sys:    42.88 MB
+[ 10/ 12] 2026-01-05 22:17:19 - Heap Alloc:    18.41 MB, Heap InUse:    21.98 MB, Heap Sys:    42.84 MB
+[ 11/ 12] 2026-01-05 22:17:24 - Heap Alloc:    18.49 MB, Heap InUse:    22.02 MB, Heap Sys:    42.84 MB
+[ 12/ 12] 2026-01-05 22:17:29 - Heap Alloc:    18.58 MB, Heap InUse:    22.08 MB, Heap Sys:    42.84 MB
+
+
+FILTER 4k
+
+[  1/ 12] 2026-01-05 21:19:53 - Heap Alloc:     4.48 MB, Heap InUse:     7.28 MB, Heap Sys:    14.88 MB
+[  2/ 12] 2026-01-05 21:19:58 - Heap Alloc:     4.54 MB, Heap InUse:     7.37 MB, Heap Sys:    14.88 MB
+[  3/ 12] 2026-01-05 21:20:03 - Heap Alloc:     4.59 MB, Heap InUse:     7.40 MB, Heap Sys:    14.88 MB
+[  4/ 12] 2026-01-05 21:20:08 - Heap Alloc:     4.62 MB, Heap InUse:     7.57 MB, Heap Sys:    14.88 MB
+[  5/ 12] 2026-01-05 21:20:13 - Heap Alloc:     4.66 MB, Heap InUse:     7.65 MB, Heap Sys:    14.84 MB
+[  6/ 12] 2026-01-05 21:20:19 - Heap Alloc:     4.71 MB, Heap InUse:     7.76 MB, Heap Sys:    14.84 MB
+[  7/ 12] 2026-01-05 21:20:24 - Heap Alloc:     4.77 MB, Heap InUse:     7.84 MB, Heap Sys:    14.84 MB
+
+FILTER 5k
+
+[  1/ 12] 2026-01-05 21:48:09 - Heap Alloc:     4.51 MB, Heap InUse:     8.09 MB, Heap Sys:    14.81 MB
+[  2/ 12] 2026-01-05 21:48:14 - Heap Alloc:     4.57 MB, Heap InUse:     8.27 MB, Heap Sys:    14.81 MB
+[  3/ 12] 2026-01-05 21:48:19 - Heap Alloc:     4.60 MB, Heap InUse:     8.41 MB, Heap Sys:    14.78 MB
+[  4/ 12] 2026-01-05 21:48:24 - Heap Alloc:     4.65 MB, Heap InUse:     8.56 MB, Heap Sys:    14.78 MB
+[  5/ 12] 2026-01-05 21:48:29 - Heap Alloc:     4.69 MB, Heap InUse:     8.62 MB, Heap Sys:    14.78 MB
+[  6/ 12] 2026-01-05 21:48:34 - Heap Alloc:     4.76 MB, Heap InUse:     8.70 MB, Heap Sys:    14.78 MB
+[  7/ 12] 2026-01-05 21:48:40 - Heap Alloc:     4.84 MB, Heap InUse:     8.80 MB, Heap Sys:    14.78 MB
+[  8/ 12] 2026-01-05 21:48:45 - Heap Alloc:     4.90 MB, Heap InUse:     8.91 MB, Heap Sys:    14.78 MB
+[  9/ 12] 2026-01-05 21:48:50 - Heap Alloc:     4.97 MB, Heap InUse:     8.96 MB, Heap Sys:    14.78 MB
+[ 10/ 12] 2026-01-05 21:48:55 - Heap Alloc:     4.38 MB, Heap InUse:     7.44 MB, Heap Sys:    14.78 MB
+[ 11/ 12] 2026-01-05 21:49:00 - Heap Alloc:     4.41 MB, Heap InUse:     7.52 MB, Heap Sys:    14.78 MB
+[ 12/ 12] 2026-01-05 21:49:05 - Heap Alloc:     4.44 MB, Heap InUse:     7.61 MB, Heap Sys:    14.78 MB
+
+FILTER 6k
+
+[  1/ 12] 2026-01-05 22:12:15 - Heap Alloc:     4.87 MB, Heap InUse:     8.52 MB, Heap Sys:    11.00 MB
+[  2/ 12] 2026-01-05 22:12:20 - Heap Alloc:     4.94 MB, Heap InUse:     8.62 MB, Heap Sys:    11.00 MB
+[  3/ 12] 2026-01-05 22:12:25 - Heap Alloc:     4.99 MB, Heap InUse:     8.80 MB, Heap Sys:    10.97 MB
+[  4/ 12] 2026-01-05 22:12:30 - Heap Alloc:     5.04 MB, Heap InUse:     8.87 MB, Heap Sys:    10.97 MB
+[  5/ 12] 2026-01-05 22:12:35 - Heap Alloc:     5.13 MB, Heap InUse:     8.97 MB, Heap Sys:    10.97 MB
+[  6/ 12] 2026-01-05 22:12:40 - Heap Alloc:     4.39 MB, Heap InUse:     7.25 MB, Heap Sys:    14.91 MB
+[  7/ 12] 2026-01-05 22:12:45 - Heap Alloc:     4.43 MB, Heap InUse:     7.31 MB, Heap Sys:    14.91 MB
+[  8/ 12] 2026-01-05 22:12:50 - Heap Alloc:     4.45 MB, Heap InUse:     7.46 MB, Heap Sys:    14.91 MB
+[  9/ 12] 2026-01-05 22:12:55 - Heap Alloc:     4.48 MB, Heap InUse:     7.54 MB, Heap Sys:    14.88 MB
+[ 10/ 12] 2026-01-05 22:13:00 - Heap Alloc:     4.53 MB, Heap InUse:     7.60 MB, Heap Sys:    14.84 MB
+[ 11/ 12] 2026-01-05 22:13:05 - Heap Alloc:     4.58 MB, Heap InUse:     7.66 MB, Heap Sys:    14.84 MB
+[ 12/ 12] 2026-01-05 22:13:11 - Heap Alloc:     4.62 MB, Heap InUse:     7.70 MB, Heap Sys:    14.84 MB

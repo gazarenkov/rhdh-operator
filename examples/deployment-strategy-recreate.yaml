@@ -1,0 +1,37 @@
+# Example: Changing Deployment Strategy to Recreate
+#
+# This example demonstrates how to change the Deployment strategy from the default
+# RollingUpdate to Recreate using the $patch: delete directive.
+#
+# Background:
+# The Deployment.spec.strategy field is a "discriminated union" where the 'type'
+# field determines which other fields are valid:
+#   - type: RollingUpdate -> rollingUpdate field is valid
+#   - type: Recreate -> rollingUpdate field must not be present
+#
+# The $patch: delete directive tells the strategic merge patch to remove the
+# rollingUpdate field during the merge process, ensuring the final configuration
+# is valid for Server-Side Apply.
+#
+# References:
+# - KEP-1027 Union Types: https://github.com/kubernetes/enhancements/blob/master/keps/sig-api-machinery/1027-api-unions/README.md
+# - Strategic Merge Patch: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-api-machinery/strategic-merge-patch.md
+
+apiVersion: rhdh.redhat.com/v1alpha5
+kind: Backstage
+metadata:
+  name: my-backstage
+spec:
+  deployment:
+    patch:
+      spec:
+        # Change strategy type to Recreate
+        # This causes the entire pod to be terminated before a new one is created,
+        # avoiding having two versions running simultaneously
+        strategy:
+          type: Recreate
+          # Use $patch: delete to remove the rollingUpdate field
+          # Without this, the merge would produce an invalid configuration with
+          # both type: Recreate and rollingUpdate fields present
+          rollingUpdate:
+            $patch: delete

@@ -1,0 +1,65 @@
+name: PR Bundle Manifests Validator
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - rhdh-1.[0-9]+
+      - 1.[0-9]+.x
+      - release-1.[0-9]+
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  check-bundle:
+    name: Validate Bundle Manifests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Verify bundle manifests are up to date
+        run: |
+          make bundles build-installers
+
+          # Check if bundle manifests changed (ignoring createdAt timestamps)
+          # Since operator-sdk 1.26.0, `make bundle` changes the `createdAt` field from the bundle every time we run it.
+          # The `git diff` below checks if only the createdAt field has changed. If it is the only change, it is ignored.
+          # Inspired from https://github.com/operator-framework/operator-sdk/issues/6285#issuecomment-1415350333
+          if git diff --quiet -I'^    createdAt: ' bundle config dist; then
+            echo "✅ Bundle manifests are up to date"
+            exit 0
+          fi
+
+          # Bundle is out of sync - provide helpful error message
+          echo "::error::Bundle manifests are out of sync with the code"
+          echo ""
+          echo "❌ The bundle manifests need to be regenerated."
+          echo ""
+          echo "This usually happens when you modify:"
+          echo "  - CRD definitions (api/)"
+          echo "  - Operator manifests (config/manifests/)"
+          echo "  - RBAC permissions (config/rbac/)"
+          echo "  - Webhook configurations (config/webhook/)"
+          echo ""
+          echo "To fix this, run:"
+          echo "  make bundles"
+          echo "  git add bundle/ config/ dist/"
+          echo "  git commit -m 'chore: regenerate bundle manifests'"
+          echo "  git push"
+          echo ""
+          echo "Changed files:"
+          git diff --name-only -I'^    createdAt: ' bundle config dist
+
+          exit 1

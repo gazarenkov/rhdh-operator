@@ -1,0 +1,210 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cme1
+data:
+  ENV_CM1: "cme1"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cme2
+data:
+  ENV_CM2: "cme2"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cme3
+data:
+  ENV_CM3_1: "cme3-1"
+  ENV_CM3_2: "cme3-2"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secrete1
+stringData:
+  ENV1: "secrete1"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secrete2
+stringData:
+  ENV2: "secrete2"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secrete3
+stringData:
+  ENV3: "secrete3"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmf1
+data:
+  file11.txt: |
+    My file11 content
+  file12.txt: |
+    My file12 content
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmf2
+data:
+  file21.txt: |
+    My file21 content
+  file22.txt: |
+    My file22 content
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmf3
+data:
+  file31.txt: |
+    My file31 content
+  file32.txt: |
+    My file32 content
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmf4
+data:
+  file41.txt: |
+    My file41 content
+  file42.txt: |
+    My file42 content
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secretf1
+stringData:
+  secret11.txt: |
+    content
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secretf2
+stringData:
+  secret21.txt: |
+    base64-encoded-content
+  secret22.txt: |
+    base64-encoded-content
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secretf3
+stringData:
+  secret31.txt: |
+    base64-encoded-content
+  secret32.txt: |
+    base64-encoded-content
+---
+# Expected:
+# backstage-backend container:
+# Files: cmf1: /my/extra/file11.txt, /my/extra/file12.txt
+#        cmf3: /my/cm3/path/file31.txt, /my/cm3/path/file32.txt
+#        cmf4: /my/cm4/path/file41.txt
+#        secretf1: /my/extra/secret11.txt
+#        secretf3: /my/secret3/secret31.txt
+# Envs: ENV4, ENV6, cme1 (ENV_CM1), cme2 (ENV_CM2), secrete3 (ENV3)
+# sidecar container:
+# Files: cmf2: /my/extra/file21.txt
+#        cmf3: /my/cm3/path/file31.txt, /my/cm3/path/file32.txt
+#        secretf2: /my/secret2/path/secret21.txt, /my/secret2/path/secret22.txt
+#        secretf3: /my/secret3/secret31.txt
+# Envs: ENV5, ENV6, ENV_CM2 (from cme2), ENV_CM3_1 (from cme3), ENV2 (from secrete2), ENV3 (from secrete3)
+# install-dynamic-plugins container:
+# Files: cmf3: /my/cm3/path/file31.txt, /my/cm3/path/file32.txt
+#        secretf3: /my/secret3/secret31.txt
+# Envs: cme2 (ENV_CM2), secrete3 (ENV3), ENV6
+
+apiVersion: rhdh.redhat.com/v1alpha5
+kind: Backstage
+metadata:
+  name: my-rhdh
+spec:
+  deployment:
+    patch:
+      spec:
+        template:
+          spec:
+            containers:
+              - name: sidecar
+                image: busybox
+                command: ["sh", "-c", "while true; do echo 'Container is running...'; sleep 5; done"]
+  application:
+    extraFiles:
+      mountPath: /my/extra
+      configMaps:
+        - name: cmf1 # /my/extra/file11.txt and /my/path/file12.txt on backtage-backend
+        - name: cmf2 # /my/extra/file21.txt expected on sidecar
+          key: file21.txt
+          containers:
+            - sidecar
+        - name: cmf3  # /my/cm3/path/file31.txt and /my/cm3/path/file312.txt on all containers
+          mountPath: /my/cm3/path
+          containers:
+            - "*"
+        - name: cmf4  # /my/cm4/path/file41.txt on backstage-backend
+          mountPath: /my/cm4/path
+          key: file41.txt
+      secrets:
+        - name: secretf1 # /my/extra/secret11.txt on backstage-backend only
+          key: secret11.txt
+        - name: secretf2 # /my/secret2/path/secret21.txt and /my/secret2/path/secret22.txt on sidecar only
+          mountPath: /my/secret2/path
+          containers:
+            - sidecar
+        - name: secretf3 # /my/secret3/secret31.txt on all containers
+          mountPath: /my/secret3
+          key: secret31.txt
+          containers:
+            - "*"
+    extraEnvs:
+      envs:
+        - name: ENV4 # in backstage-backend container only
+          value: "env4"
+        - name: ENV5  # only in install-dynamic-plugins container
+          value: "env5"
+          containers:
+            - sidecar
+        - name: ENV6 # in all containers
+          value: "env6"
+          containers:
+            - "*"
+      configMaps:
+        - name: cme1 # ENV_CM1 in backstage-backend only
+        - name: cme2 # ENV_CM2 in all containers
+          containers:
+            - "*"
+        - name: cme3  # ENV_CM3_1 in sidecar only
+          key: ENV_CM3_1
+          containers:
+            - sidecar
+      secrets:
+        - name: secrete1
+          key: ENV1
+        - name: secrete2
+          containers:
+            - sidecar
+        - name: secrete3
+          containers:
+            - "*"

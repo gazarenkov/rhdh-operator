@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config-rhdh
+  labels:
+    rhdh.redhat.com/external-config: "true"
+data:
+  "app-config-rhdh.yaml": |
+    app:
+      title: My Awesome RHDH
+      # As of 0.6 (RHDH 1.6), this is not needed on OCP by default, but needed on other platforms
+    #  baseUrl: https://my-rhdh-example.com
+    backend:
+      # As of 0.6 (RHDH 1.6), this is not needed on OCP by default, but needed on other platforms
+      #  baseUrl: https://my-rhdh-example.com
+      auth:
+        externalAccess:
+            - type: legacy
+              options:
+                subject: legacy-default-config
+                secret: "${BACKEND_SECRET}"
+      #cors:
+      #  # As of 0.6 (RHDH 1.6), this is not needed on OCP by default, but needed on other platforms
+      #  origin: https://my-rhdh-example.com
+    auth:
+      # see https://backstage.io/docs/auth/ to learn about auth providers
+      environment: development
+      providers:
+        github:
+          development:
+            clientId: '${GH_CLIENT_ID}'
+            clientSecret: '${GH_CLIENT_SECRET}'
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: secrets-rhdh
+  labels:
+    rhdh.redhat.com/external-config: "true"
+stringData:
+  # generated with the command below (from https://backstage.io/docs/auth/service-to-service-auth/#setup):
+  # node -p 'require("crypto").randomBytes(24).toString("base64")'
+  BACKEND_SECRET: "R2FxRVNrcmwzYzhhN3l0V1VRcnQ3L1pLT09WaVhDNUEK" # notsecret
+  GH_ORG: "my-gh-org"
+  GH_CLIENT_ID: "my GH client ID"
+  GH_CLIENT_SECRET: "my GH client secret"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dynamic-plugins-rhdh
+  labels:
+    rhdh.redhat.com/external-config: "true"
+data:
+  dynamic-plugins.yaml: |
+    includes:
+      - dynamic-plugins.default.yaml
+    plugins:
+      - package: './dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic'
+        disabled: false
+        pluginConfig:
+          catalog:
+            providers:
+              github:
+                myorg:
+                  organization: '${GH_ORG}'
+                  schedule:
+                    # supports cron, ISO duration, "human duration" (used below)
+                    frequency: { minutes: 30}
+                    # supports ISO duration, "human duration (used below)
+                    timeout: { minutes: 3}
+                    initialDelay: { seconds: 15}
+
+---
+apiVersion: rhdh.redhat.com/v1alpha5
+kind: Backstage
+metadata:
+  name: my-rhdh
+spec:
+  # Enable automatic ServiceMonitor creation for metrics monitoring
+  monitoring:
+    enabled: true
+  deployment:
+    patch:
+      spec:
+        template:
+          spec:
+            containers:
+              - name: backstage-backend
+                image: quay.io/rhdh-community/rhdh:next
+  application:
+    appConfig:
+      configMaps:
+        - name: app-config-rhdh
+    dynamicPluginsConfigMapName: dynamic-plugins-rhdh
+    extraEnvs:
+      secrets:
+        - name: secrets-rhdh

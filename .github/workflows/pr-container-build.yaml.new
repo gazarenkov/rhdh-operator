@@ -1,0 +1,161 @@
+name: Build PR Images (Slash Command)
+
+on:
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: build-images-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ${{ vars.REGISTRY }}
+
+jobs:
+  build-images:
+    # Only run if:
+    # 1. Comment is on a PR (not a regular issue)
+    # 2. Comment starts with /build-images
+    # 3. Comment author is a maintainer
+    if: |
+      github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '/build-images') &&
+      contains(fromJSON('["gazarenkov","nickboldt","rm3l","kim-tsao","kadel","Fortune-Ndlovu","subhashkhileri","zdrapela","openshift-cherrypick-robot","OpinionatedHeron"]'), github.event.comment.user.login)
+
+    name: Build and Push PR Images
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
+
+    steps:
+      - name: React to comment
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: context.payload.comment.id,
+              content: 'rocket'
+            });
+
+      - name: Get PR details
+        id: pr
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            core.setOutput('sha', pr.data.head.sha);
+            core.setOutput('ref', pr.data.head.ref);
+            core.setOutput('repo', pr.data.head.repo.full_name);
+            core.setOutput('number', context.issue.number);
+
+      - name: Checkout PR code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          fetch-depth: 0
+          repository: ${{ steps.pr.outputs.repo }}
+          ref: ${{ steps.pr.outputs.sha }}
+
+      # Note: No changed-files check needed for slash-command pattern.
+      # Unlike pull_request_target which runs automatically on every push,
+      # this workflow only runs when explicitly requested by a maintainer.
+      # The maintainer's decision to trigger /build-images is the authorization
+      # to build - we trust their judgment rather than second-guessing with file checks.
+      # Reasons to build without code changes: dependency updates, retry after failure,
+      # base image updates, or verifying reproducibility.
+
+      - name: Setup Go
+        uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Get version and SHA
+        run: |
+          SHORT_SHA=$(git rev-parse --short ${{ steps.pr.outputs.sha }})
+          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
+          BASE_VERSION=$(grep -E "^VERSION \?=" Makefile | sed -r -e "s/.+= //")
+          echo "BASE_VERSION=$BASE_VERSION" >> $GITHUB_ENV
+
+      - name: Login to registry (${{ env.REGISTRY }})
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ vars.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_TOKEN }}
+
+      - name: Build and push operator, bundle, and catalog images
+        run: |
+          # Install skopeo, podman
+          sudo apt-get -y update; sudo apt-get -y install skopeo podman
+
+          export CONTAINER_TOOL=podman
+          export VERSION=${{ env.BASE_VERSION }}-pr-${{ steps.pr.outputs.number }}-${{ env.SHORT_SHA }}
+          export REGISTRY_WITH_ORG=${{ env.REGISTRY }}/${{ env.REGISTRY_ORG }}
+          export OPERATOR_IMAGE_NAME=${OPERATOR_IMAGE_NAME:-operator}
+          export IMAGE_TAG_BASE=${REGISTRY_WITH_ORG}/${OPERATOR_IMAGE_NAME}
+
+          set -ex
+
+          # Build operator, bundle, and catalog images
+          CONTAINER_TOOL=${CONTAINER_TOOL} VERSION=${VERSION} make lint release-build
+
+          # Now copy images from local cache to quay, using 0.0.1-pr-123-f00cafe and 0.0.1-pr-123 tags
+          for image in ${OPERATOR_IMAGE_NAME} ${OPERATOR_IMAGE_NAME}-bundle ${OPERATOR_IMAGE_NAME}-catalog; do
+            podman push -q ${REGISTRY_WITH_ORG}/${image}:${VERSION} docker://${REGISTRY_WITH_ORG}/${image}:${VERSION}
+            skopeo --insecure-policy copy --all docker://${REGISTRY_WITH_ORG}/${image}:${VERSION} docker://${REGISTRY_WITH_ORG}/${image}:${VERSION}
+            skopeo --insecure-policy copy --all docker://${REGISTRY_WITH_ORG}/${image}:${VERSION} docker://${REGISTRY_WITH_ORG}/${image}:${VERSION%-*}
+          done
+        env:
+          REGISTRY_ORG: ${{ vars.REGISTRY_ORG }}
+          OPERATOR_IMAGE_NAME: ${{ vars.OPERATOR_IMAGE_NAME }}
+          GH_TOKEN: ${{ secrets.RHDH_BOT_TOKEN }}
+
+      - name: Comment image links in PR
+        if: success()
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ **PR images built successfully!**
+
+            Images are available for testing:
+
+            1. **Operator:** \`quay.io/rhdh-community/operator:${{ env.BASE_VERSION }}-pr-${{ steps.pr.outputs.number }}-${{ env.SHORT_SHA }}\`
+            2. **Bundle:** \`quay.io/rhdh-community/operator-bundle:${{ env.BASE_VERSION }}-pr-${{ steps.pr.outputs.number }}-${{ env.SHORT_SHA }}\`
+            3. **Catalog:** \`quay.io/rhdh-community/operator-catalog:${{ env.BASE_VERSION }}-pr-${{ steps.pr.outputs.number }}-${{ env.SHORT_SHA }}\`
+
+            Also available with PR number tag:
+            - \`quay.io/rhdh-community/operator:${{ env.BASE_VERSION }}-pr-${{ steps.pr.outputs.number }}\`
+            - \`quay.io/rhdh-community/operator-bundle:${{ env.BASE_VERSION }}-pr-${{ steps.pr.outputs.number }}\`
+            - \`quay.io/rhdh-community/operator-catalog:${{ env.BASE_VERSION }}-pr-${{ steps.pr.outputs.number }}\`
+
+            <sub>Triggered by @${{ github.event.comment.user.login }}</sub>`
+            });
+
+      - name: Comment on failure
+        if: failure()
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `❌ **Image build failed**
+
+            See workflow run for details: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            <sub>Triggered by @${{ github.event.comment.user.login }}</sub>`
+            });

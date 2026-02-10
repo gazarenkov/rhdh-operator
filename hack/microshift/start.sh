@@ -6,7 +6,7 @@ set -euo pipefail
 KUBECONFIG_PATH="${KUBECONFIG:-/tmp/microshift-kubeconfig}"
 WAIT_TIMEOUT="${WAIT_TIMEOUT:-300}"
 INSTALL_OLM=true
-OLM_VERSION="${OLM_VERSION:-v0.27.0}"  # v0.28.0 has annotation size issues
+OLM_VERSION="${OLM_VERSION:-v0.28.0}"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -137,7 +137,9 @@ if [ "$INSTALL_OLM" = true ]; then
     echo "⚠️  OLM is already installed"
   else
     echo "Installing OLM CRDs..."
-    kubectl apply -f "https://github.com/operator-framework/operator-lifecycle-manager/releases/download/${OLM_VERSION}/crds.yaml"
+    # Use server-side apply to avoid "annotations too long" error
+    # See: https://github.com/operator-framework/operator-lifecycle-manager/issues/2778
+    kubectl apply --server-side --force-conflicts -f "https://github.com/operator-framework/operator-lifecycle-manager/releases/download/${OLM_VERSION}/crds.yaml"
 
     echo "Waiting for CRDs to be established..."
     sleep 5

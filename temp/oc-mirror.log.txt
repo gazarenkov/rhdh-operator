@@ -1,0 +1,10 @@
+Found: /Users/gena/projects/rhdh-operator/temp/oc-mirror-workspace/src/publish
+Found: /Users/gena/projects/rhdh-operator/temp/oc-mirror-workspace/src/v2
+Found: /Users/gena/projects/rhdh-operator/temp/oc-mirror-workspace/src/charts
+Found: /Users/gena/projects/rhdh-operator/temp/oc-mirror-workspace/src/release-signatures
+No metadata detected, creating new workspace
+wrote mirroring manifests to /Users/gena/projects/rhdh-operator/temp/oc-mirror-workspace/operators.1760026341/manifests-redhat-operator-index
+
+To upload local images to a registry, run:
+
+	oc adm catalog mirror file://redhat/redhat-operator-index:v4.18 REGISTRY/REPOSITORY
