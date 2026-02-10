@@ -7,7 +7,7 @@ echo "=== Starting MicroShift in Container ==="
 
 # Install OLM if requested
 INSTALL_OLM="${INSTALL_OLM:-true}"
-OLM_VERSION="${OLM_VERSION:-v0.28.0}"
+OLM_VERSION="${OLM_VERSION:-v0.27.0}"  # v0.28.0 has annotation size issues
 
 # Start MicroShift
 echo "Starting MicroShift..."

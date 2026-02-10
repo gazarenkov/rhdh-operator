@@ -6,7 +6,7 @@ set -euo pipefail
 KUBECONFIG_PATH="${KUBECONFIG:-/tmp/microshift-kubeconfig}"
 WAIT_TIMEOUT="${WAIT_TIMEOUT:-300}"
 INSTALL_OLM=true
-OLM_VERSION="${OLM_VERSION:-v0.28.0}"
+OLM_VERSION="${OLM_VERSION:-v0.27.0}"  # v0.28.0 has annotation size issues
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do

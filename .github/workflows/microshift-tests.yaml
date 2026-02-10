@@ -62,7 +62,8 @@ jobs:
       - name: Install OLM
         if: github.event.inputs.skip_olm != 'true'
         run: |
-          OLM_VERSION="${OLM_VERSION:-v0.28.0}"
+          # Use v0.27.0 to avoid "annotations too long" error with clusterserviceversions CRD
+          OLM_VERSION="${OLM_VERSION:-v0.27.0}"
 
           echo "Installing OLM ${OLM_VERSION}..."
           kubectl apply -f "https://github.com/operator-framework/operator-lifecycle-manager/releases/download/${OLM_VERSION}/crds.yaml"

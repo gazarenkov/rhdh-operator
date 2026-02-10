@@ -282,7 +282,7 @@ hack/microshift/run-local.sh -d
 - `KUBECONFIG` - Path to kubeconfig file (default: `/tmp/microshift-kubeconfig`)
 - `WAIT_TIMEOUT` - Timeout in seconds for startup (default: `300`)
 - `MICROSHIFT_VERSION` - MicroShift version to install (default: `4.17.0`)
-- `OLM_VERSION` - OLM version to install (default: `v0.28.0`, skipped with `--no-olm`)
+- `OLM_VERSION` - OLM version to install (default: `v0.27.0`, skipped with `--no-olm`)
 
 ### Command-Line Flags
 
@@ -393,7 +393,7 @@ To skip OLM installation, use the `--no-olm` flag:
 hack/microshift/start.sh --no-olm  # Skip OLM installation
 ```
 
-OLM v0.28.0 (configurable via `OLM_VERSION` env var) is installed by default and enables:
+OLM v0.27.0 (configurable via `OLM_VERSION` env var) is installed by default and enables:
 - Installing operators from catalogs
 - Managing operator subscriptions
 - Testing OLM deployment mode for RHDH operator
