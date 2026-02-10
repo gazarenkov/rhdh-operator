@@ -14,8 +14,7 @@ sudo apt-get install -y \
   conntrack \
   iptables \
   socat \
-  containernetworking-plugins \
-  cri-tools
+  containernetworking-plugins
 
 # Download MicroShift binary
 echo "Downloading MicroShift binary..."
