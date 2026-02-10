@@ -51,10 +51,11 @@ jobs:
           df -h
 
       - name: Start MicroShift
-        uses: container-tools/microshift-action@v0.3
+        uses: container-tools/microshift-action@v0.3.0
         with:
-          # Use a stable version instead of nightly
-          version: v4.16.0
+          # Note: This action supports up to MicroShift 4.8.0
+          # For newer versions, we may need to use latest commit
+          version: latest
 
       - name: Verify MicroShift cluster
         run: |
