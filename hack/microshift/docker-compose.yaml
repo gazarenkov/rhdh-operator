@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  microshift:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MICROSHIFT_VERSION: ${MICROSHIFT_VERSION:-4.17.0}
+
+    container_name: microshift
+    hostname: microshift
+
+    # Privileged mode required for Kubernetes components
+    privileged: true
+
+    # Security capabilities
+    cap_add:
+      - SYS_ADMIN
+      - NET_ADMIN
+
+    # Environment variables
+    environment:
+      - INSTALL_OLM=${INSTALL_OLM:-true}
+      - OLM_VERSION=${OLM_VERSION:-v0.28.0}
+
+    # Ports
+    ports:
+      - "6443:6443"    # Kubernetes API server
+      - "10250:10250"  # Kubelet
+
+    # Volumes
+    volumes:
+      # Mount kubeconfig output
+      - ./output:/output
+
+      # Persist MicroShift data (optional, comment out for clean starts)
+      # - microshift-data:/var/lib/microshift
+
+    # Healthcheck
+    healthcheck:
+      test: ["CMD", "curl", "-k", "https://localhost:6443/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+    # Resource limits (adjust based on your system)
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+
+volumes:
+  microshift-data:
+    driver: local

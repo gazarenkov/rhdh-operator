@@ -1,0 +1,5 @@
+# Generated kubeconfig
+output/
+
+# Container build artifacts
+.docker/

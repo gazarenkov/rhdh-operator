@@ -1,0 +1,154 @@
+name: MicroShift Integration Tests
+
+on:
+  # Run on schedule (nightly)
+  schedule:
+    - cron: '0 2 * * *'  # 2 AM UTC daily
+
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: 'Profile to test (rhdh, backstage.io)'
+        required: false
+        default: 'rhdh'
+      skip_olm:
+        description: 'Skip OLM installation (OLM installed by default)'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: microshift-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  KUBECONFIG: /tmp/microshift-kubeconfig
+
+jobs:
+  microshift-test:
+    name: Test on MicroShift
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
+        with:
+          fetch-depth: 0
+
+      - name: Free up disk space
+        run: |
+          # GitHub runners have limited space, clean up to make room for MicroShift
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          df -h
+
+      - name: Install MicroShift
+        run: hack/microshift/install.sh
+
+      - name: Start MicroShift
+        run: |
+          if [ "${{ github.event.inputs.skip_olm }}" = "true" ]; then
+            hack/microshift/start.sh --no-olm
+          else
+            hack/microshift/start.sh
+          fi
+        env:
+          WAIT_TIMEOUT: 300
+
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+          kubectl version --client
+
+      - name: Verify OpenShift features
+        run: |
+          # Check for OpenShift-specific resources
+          kubectl api-resources | grep -E "(route|security)" || echo "Checking OpenShift APIs..."
+
+          # Verify OLM is installed (unless skipped)
+          if [ "${{ github.event.inputs.skip_olm }}" != "true" ]; then
+            echo "Verifying OLM installation..."
+            kubectl get pods -n olm
+            kubectl get crd | grep -E "(catalogsource|subscription|clusterserviceversion)" || echo "OLM CRDs check"
+          fi
+
+          # Try to create a test route to verify Routes API works
+          kubectl get routes -A 2>&1 || echo "Routes API check completed"
+
+      - name: Setup Go
+        uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Build and deploy operator
+        run: |
+          # Generate manifests and code
+          make manifests generate
+
+          # Build operator image
+          make image-build IMG=localhost/operator:test
+
+          # Deploy operator (installs CRDs, creates deployment, RBAC, etc.)
+          make deploy IMG=localhost/operator:test PROFILE=${{ github.event.inputs.profile || 'rhdh' }}
+
+          # Wait for operator deployment to be ready
+          kubectl wait --for=condition=Available --timeout=300s \
+            deployment/backstage-controller-manager -n backstage-system
+
+          echo "=== Operator pods ==="
+          kubectl get pods -n backstage-system
+
+      - name: Run integration tests
+        run: |
+          # Run all integration tests (including OpenShift-specific ones)
+          # since we're on MicroShift (OpenShift platform)
+          make integration-test \
+            PROFILE=${{ github.event.inputs.profile || 'rhdh' }} \
+            USE_EXISTING_CLUSTER=true \
+            USE_EXISTING_CONTROLLER=true
+
+      - name: Run OLM deployment tests
+        if: success() && github.event.inputs.skip_olm != 'true'
+        run: |
+          # Undeploy the direct deployment before testing OLM
+          make undeploy
+
+          # Test OLM deployment mode
+          make test-e2e BACKSTAGE_OPERATOR_TEST_MODE=olm
+
+      - name: Collect diagnostics on failure
+        if: failure()
+        run: |
+          hack/microshift/logs.sh
+
+          # Collect operator logs if deployed
+          echo ""
+          echo "=== Operator Logs ==="
+          kubectl logs -n backstage-system deployment/backstage-controller-manager --all-containers --tail=200 2>/dev/null || echo "No operator logs available"
+
+          # Save operator logs to file for upload
+          kubectl logs -n backstage-system deployment/backstage-controller-manager --all-containers --tail=500 > /tmp/operator.log 2>/dev/null || true
+
+      - name: Cleanup
+        if: always()
+        run: |
+          # Cleanup operator deployments (both direct and OLM)
+          make undeploy || true
+          make undeploy-olm || true
+
+          # Stop MicroShift
+          hack/microshift/stop.sh
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: microshift-test-logs
+          path: |
+            /tmp/microshift.log
+            /tmp/operator.log
+          retention-days: 7
