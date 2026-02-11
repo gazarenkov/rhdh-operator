@@ -45,60 +45,47 @@ docker save "${IMAGE}" -o image.tar
 tar -xf image.tar
 rm image.tar
 
-# Find the layer with the data
-# Parse manifest.json to get layer paths
-LAYERS=$(grep -o '"blobs/sha256/[^"]*"' manifest.json | sed 's/"//g' | grep -v "^blobs/sha256/[a-f0-9]*$" || true)
+# Find the layers from manifest.json
+# Docker images are built from multiple layers stacked together
+# We need to extract ALL layers in order to build the complete filesystem
+LAYERS=$(python3 -c "
+import json
+with open('manifest.json') as f:
+    manifest = json.load(f)
+    for layer in manifest[0]['Layers']:
+        print(layer)
+" 2>/dev/null || grep -o '"Layers":\s*\[[^]]*\]' manifest.json | grep -o '"blobs/[^"]*"' | sed 's/"//g')
 
-# If that didn't work, get all blob files
 if [ -z "$LAYERS" ]; then
-  LAYERS=$(find blobs/sha256 -type f)
+  echo "Error: Could not parse layers from manifest.json"
+  echo "manifest.json content:"
+  cat manifest.json
+  exit 1
 fi
 
-echo "Found layers:"
+echo "Found layers (will extract all in order):"
 echo "$LAYERS"
+echo ""
 
-# Extract the layer
+# Extract all layers
 mkdir -p rootfs
 
-# Try each layer until we find the one with dynamic-plugins.default.yaml
-FOUND=false
 for layer in $LAYERS; do
-  echo "Trying layer: $layer ($(du -h "$layer" | cut -f1))"
+  echo "Extracting layer: $layer ($(du -h "$layer" 2>/dev/null | cut -f1 || echo 'unknown size'))"
 
   # Check if it's a gzipped file
   if ! gunzip -t "$layer" 2>/dev/null; then
-    echo "  Skipping (not gzipped)"
+    echo "  Skipping (not a gzipped tar file)"
     continue
   fi
 
-  # Try to list contents
-  if tar -tzf "$layer" 2>/dev/null | grep -q "dynamic-plugins.default.yaml"; then
-    echo "  Found dynamic-plugins.default.yaml in layer!"
-    tar -xzf "$layer" -C rootfs
-    FOUND=true
-    break
-  else
-    echo "  Not found in this layer"
-  fi
+  # Extract the layer (later layers overwrite earlier ones)
+  tar -xzf "$layer" -C rootfs 2>/dev/null || echo "  Warning: Failed to extract layer"
 done
 
-if [ "$FOUND" = false ]; then
-  echo ""
-  echo "Error: Could not find dynamic-plugins.default.yaml in any layer"
-  echo ""
-  echo "Available blobs:"
-  ls -lh blobs/sha256/
-  echo ""
-  echo "Blob types:"
-  for layer in $LAYERS; do
-    if gunzip -t "$layer" 2>/dev/null; then
-      echo "  $layer: gzipped tar ($(tar -tzf "$layer" 2>/dev/null | head -5 | tr '\n' ' '))"
-    else
-      echo "  $layer: not gzipped ($(head -c 100 "$layer"))"
-    fi
-  done
-  exit 1
-fi
+echo ""
+echo "Extraction complete. Filesystem contents:"
+ls -lh rootfs/ | head -20
 
 # Check if dynamic-plugins.default.yaml exists
 if [ ! -f "rootfs/dynamic-plugins.default.yaml" ]; then
