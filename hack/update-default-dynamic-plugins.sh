@@ -39,15 +39,16 @@ trap "rm -rf ${TEMP_DIR}" EXIT
 
 echo "Extracting dynamic-plugins.default.yaml from image..."
 cd "${TEMP_DIR}"
-echo "cd ....."
+
 # Save and extract the image
 docker save "${IMAGE}" -o image.tar
-echo "save ....."
 tar -xf image.tar
 rm image.tar
+echo "rm ....."
 
 # Find the layer with the data
 LAYER=$(find blobs/sha256 -type f -exec file {} \; | grep "gzip compressed" | cut -d: -f1 | head -1)
+echo "layer ..... {$LAYER}"
 
 if [ -z "$LAYER" ]; then
   echo "Error: Could not find compressed layer in image"
