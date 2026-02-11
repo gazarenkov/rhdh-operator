@@ -63,19 +63,40 @@ mkdir -p rootfs
 # Try each layer until we find the one with dynamic-plugins.default.yaml
 FOUND=false
 for layer in $LAYERS; do
-  echo "Trying layer: $layer"
+  echo "Trying layer: $layer ($(du -h "$layer" | cut -f1))"
+
+  # Check if it's a gzipped file
+  if ! gunzip -t "$layer" 2>/dev/null; then
+    echo "  Skipping (not gzipped)"
+    continue
+  fi
+
+  # Try to list contents
   if tar -tzf "$layer" 2>/dev/null | grep -q "dynamic-plugins.default.yaml"; then
-    echo "Found dynamic-plugins.default.yaml in layer: $layer"
+    echo "  Found dynamic-plugins.default.yaml in layer!"
     tar -xzf "$layer" -C rootfs
     FOUND=true
     break
+  else
+    echo "  Not found in this layer"
   fi
 done
 
 if [ "$FOUND" = false ]; then
+  echo ""
   echo "Error: Could not find dynamic-plugins.default.yaml in any layer"
-  echo "Available layers:"
+  echo ""
+  echo "Available blobs:"
   ls -lh blobs/sha256/
+  echo ""
+  echo "Blob types:"
+  for layer in $LAYERS; do
+    if gunzip -t "$layer" 2>/dev/null; then
+      echo "  $layer: gzipped tar ($(tar -tzf "$layer" 2>/dev/null | head -5 | tr '\n' ' '))"
+    else
+      echo "  $layer: not gzipped ($(head -c 100 "$layer"))"
+    fi
+  done
   exit 1
 fi
 
