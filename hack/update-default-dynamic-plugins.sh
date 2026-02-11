@@ -44,22 +44,40 @@ cd "${TEMP_DIR}"
 docker save "${IMAGE}" -o image.tar
 tar -xf image.tar
 rm image.tar
-echo "rm ....."
 
 # Find the layer with the data
-LAYER=$(find blobs/sha256 -type f -exec file {} \; | grep "gzip compressed" | cut -d: -f1 | head -1)
-echo "layer ..... {$LAYER}"
+# Parse manifest.json to get layer paths
+LAYERS=$(grep -o '"blobs/sha256/[^"]*"' manifest.json | sed 's/"//g' | grep -v "^blobs/sha256/[a-f0-9]*$" || true)
 
-if [ -z "$LAYER" ]; then
-  echo "Error: Could not find compressed layer in image"
-  exit 1
+# If that didn't work, get all blob files
+if [ -z "$LAYERS" ]; then
+  LAYERS=$(find blobs/sha256 -type f)
 fi
 
-echo "Found layer: ${LAYER}"
+echo "Found layers:"
+echo "$LAYERS"
 
 # Extract the layer
 mkdir -p rootfs
-tar -xzf "${LAYER}" -C rootfs
+
+# Try each layer until we find the one with dynamic-plugins.default.yaml
+FOUND=false
+for layer in $LAYERS; do
+  echo "Trying layer: $layer"
+  if tar -tzf "$layer" 2>/dev/null | grep -q "dynamic-plugins.default.yaml"; then
+    echo "Found dynamic-plugins.default.yaml in layer: $layer"
+    tar -xzf "$layer" -C rootfs
+    FOUND=true
+    break
+  fi
+done
+
+if [ "$FOUND" = false ]; then
+  echo "Error: Could not find dynamic-plugins.default.yaml in any layer"
+  echo "Available layers:"
+  ls -lh blobs/sha256/
+  exit 1
+fi
 
 # Check if dynamic-plugins.default.yaml exists
 if [ ! -f "rootfs/dynamic-plugins.default.yaml" ]; then
