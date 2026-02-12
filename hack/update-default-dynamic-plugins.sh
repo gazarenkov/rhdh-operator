@@ -73,14 +73,13 @@ mkdir -p rootfs
 for layer in $LAYERS; do
   echo "Extracting layer: $layer ($(du -h "$layer" 2>/dev/null | cut -f1 || echo 'unknown size'))"
 
-  # Check if it's a gzipped file
-  if ! gunzip -t "$layer" 2>/dev/null; then
-    echo "  Skipping (not a gzipped tar file)"
-    continue
+  # Use tar without -z to auto-detect compression (gzip, zstd, uncompressed, etc.)
+  # Modern tar handles all compression formats automatically
+  if tar -xf "$layer" -C rootfs 2>/dev/null; then
+    echo "  ✓ Extracted successfully"
+  else
+    echo "  ✗ Failed to extract"
   fi
-
-  # Extract the layer (later layers overwrite earlier ones)
-  tar -xzf "$layer" -C rootfs 2>/dev/null || echo "  Warning: Failed to extract layer"
 done
 
 echo ""
