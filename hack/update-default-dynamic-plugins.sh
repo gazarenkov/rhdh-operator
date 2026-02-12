@@ -29,9 +29,16 @@ echo "Source image: ${IMAGE}"
 echo "Output file: ${OUTPUT_FILE}"
 echo ""
 
-# Pull the image for AMD64 platform
+# Pull the image for AMD64 platform and capture digest
 echo "Pulling image..."
-docker pull --platform linux/amd64 "${IMAGE}"
+PULL_OUTPUT=$(docker pull --platform linux/amd64 "${IMAGE}" 2>&1)
+echo "$PULL_OUTPUT"
+
+# Extract and display the digest
+DIGEST=$(echo "$PULL_OUTPUT" | grep -i "Digest:" | head -1 | awk '{print $2}')
+echo ""
+echo "Pulled image digest: ${DIGEST:-unknown}"
+echo ""
 
 # Create temporary directory
 TEMP_DIR=$(mktemp -d)
