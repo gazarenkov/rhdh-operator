@@ -8,10 +8,14 @@ import (
 
 	"github.com/redhat-developer/rhdh-operator/api"
 	"github.com/redhat-developer/rhdh-operator/pkg/model"
+	"github.com/redhat-developer/rhdh-operator/pkg/platform"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
 )
 
@@ -96,4 +100,53 @@ func TestExtConcatData(t *testing.T) {
 	cm.Data = map[string]string{"key4": "value4", "key2": "value2", "key3": "value3", "key1": "value1"}
 	assert.Equal(t, data1, concatData(original, &cm))
 
+}
+
+func TestPluginDependencyConfig(t *testing.T) {
+	ctx := context.TODO()
+	bs := api.Backstage{
+		ObjectMeta: metav1.ObjectMeta{Name: "bs1", Namespace: "ns1"},
+		Spec: api.BackstageSpec{Application: &api.Application{ExtraEnvs: &api.ExtraEnvs{
+			ConfigMaps: []api.EnvObjectRef{{Name: "okp-config", Containers: []string{"lightspeed-core"}}},
+		}}},
+	}
+	cm := corev1.ConfigMap{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "okp-config",
+			Namespace: "ns1",
+			Labels:    map[string]string{model.PluginDependencyConfigLabel: "okp"},
+		},
+		Data: map[string]string{"OKP_INGRESS_HOST": "okp.example.com"},
+	}
+	rc := BackstageReconciler{Client: NewMockClient()}
+	assert.NoError(t, rc.Create(ctx, &cm))
+
+	extConf, err := rc.preprocessSpec(ctx, bs)
+	assert.NoError(t, err)
+	assert.Equal(t, "okp.example.com", extConf.PluginDependencyConfigs["okp"]["OKP_INGRESS_HOST"])
+}
+
+func TestOpenShiftIngressConfig(t *testing.T) {
+	ctx := context.TODO()
+	rc := BackstageReconciler{Client: NewMockClient(), Platform: platform.OpenShift}
+
+	ingress := &unstructured.Unstructured{}
+	ingress.SetGroupVersionKind(schema.GroupVersionKind{Group: "config.openshift.io", Version: "v1", Kind: "Ingress"})
+	ingress.SetName("cluster")
+	ingress.Object["spec"] = map[string]interface{}{"domain": "apps.example.com"}
+	require.NoError(t, rc.Create(ctx, ingress))
+
+	certificate := &corev1.ConfigMap{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      openShiftIngressCertificateName,
+			Namespace: openShiftIngressCertificateNamespace,
+		},
+		Data: map[string]string{openShiftIngressCertificateKey: "test ingress CA\n"},
+	}
+	require.NoError(t, rc.Create(ctx, certificate))
+
+	extConf, err := rc.preprocessSpec(ctx, api.Backstage{ObjectMeta: metav1.ObjectMeta{Name: "bs1", Namespace: "ns1"}})
+	require.NoError(t, err)
+	assert.Equal(t, "apps.example.com", extConf.OpenShiftIngressDomain)
+	assert.Equal(t, "test ingress CA\n", extConf.OpenShiftIngressCABundle)
 }

@@ -45,6 +45,12 @@ func (r *BackstageReconciler) preprocessSpec(ctx context.Context, backstage api.
 			return result, err
 		}
 		result.OpenShiftIngressDomain = domain
+
+		caBundle, err := r.getOCPIngressCABundle(ctx)
+		if err != nil {
+			return result, err
+		}
+		result.OpenShiftIngressCABundle = caBundle
 	}
 
 	hashingData := []byte{}
@@ -117,6 +123,21 @@ func (r *BackstageReconciler) preprocessSpec(ctx context.Context, backstage api.
 				return result, err
 			}
 			result.ExtraEnvConfigMapKeys[ee.Name] = model.NewDataObjectKeys(cm.Data, cm.BinaryData)
+
+			if dependencyRef := cm.Labels[model.PluginDependencyConfigLabel]; dependencyRef != "" {
+				if _, exists := result.PluginDependencyConfigs[dependencyRef]; exists {
+					return result, fmt.Errorf("multiple extra environment ConfigMaps configure plugin dependency %q", dependencyRef)
+				}
+				values := make(map[string]string, len(cm.Data))
+				if ee.Key != "" {
+					values[ee.Key] = cm.Data[ee.Key]
+				} else {
+					for key, value := range cm.Data {
+						values[key] = value
+					}
+				}
+				result.PluginDependencyConfigs[dependencyRef] = values
+			}
 		}
 	}
 
@@ -298,4 +319,32 @@ func (r *BackstageReconciler) getOCPIngressDomain() (string, error) {
 		return "", nil
 	}
 	return d, nil
+}
+
+const (
+	openShiftIngressCertificateNamespace = "openshift-config-managed"
+	openShiftIngressCertificateName      = "default-ingress-cert"
+	openShiftIngressCertificateKey       = "ca-bundle.crt"
+)
+
+// getOCPIngressCABundle returns the public certificate chain used by the default OpenShift ingress controller.
+func (r *BackstageReconciler) getOCPIngressCABundle(ctx context.Context) (string, error) {
+	cm := &corev1.ConfigMap{}
+	err := r.Get(ctx, client.ObjectKey{
+		Name:      openShiftIngressCertificateName,
+		Namespace: openShiftIngressCertificateNamespace,
+	}, cm)
+	if err != nil {
+		if k8serrors.IsNotFound(err) {
+			klog.V(1).Info("no default OpenShift ingress certificate ConfigMap found")
+			return "", nil
+		}
+		return "", err
+	}
+
+	caBundle := cm.Data[openShiftIngressCertificateKey]
+	if caBundle == "" {
+		klog.V(1).Info("default OpenShift ingress certificate ConfigMap has no CA bundle")
+	}
+	return caBundle, nil
 }

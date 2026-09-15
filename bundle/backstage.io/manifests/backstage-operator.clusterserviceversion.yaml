@@ -25,7 +25,7 @@ metadata:
           }
         }
       ]
-    createdAt: "2026-09-14T16:07:38Z"
+    createdAt: "2026-09-14T20:38:43Z"
     description: Backstage Operator
     operators.operatorframework.io/builder: operator-sdk-v1.42.2
     operators.operatorframework.io/project_layout: go.kubebuilder.io/v4
@@ -134,6 +134,7 @@ spec:
         - apiGroups:
           - networking.k8s.io
           resources:
+          - ingresses
           - networkpolicies
           verbs:
           - create

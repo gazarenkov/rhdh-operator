@@ -6,8 +6,8 @@ spec:
       containers:
         # Lightspeed Core Backend
         - name: lightspeed-core
-          image: quay.io/lightspeed-core/lightspeed-stack:dev-20260811-0da4b12
-          imagePullPolicy: Always
+          image: quay.io/lightspeed-core/lightspeed-stack:dev-20260824-cbd182b
+          imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
             runAsNonRoot: true
@@ -28,18 +28,38 @@ spec:
             limits:
               cpu: 1000m
               memory: 2Gi
+{{ if eq .Rhdh.Runtime.Platform "ocp" }}
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - |
+              if [ -f /app-root/ingress-ca.crt ]; then
+                cat /etc/pki/tls/certs/ca-bundle.crt /app-root/ingress-ca.crt > /tmp/combined-ca-bundle.crt
+                export SSL_CERT_FILE=/tmp/combined-ca-bundle.crt
+                export REQUESTS_CA_BUNDLE=/tmp/combined-ca-bundle.crt
+              fi
+              exec /app-root/entrypoint.sh --synthesized-config-output /tmp/.generated/run.yaml
+{{ else }}
           args:
             - "--synthesized-config-output"
             - "/tmp/.generated/run.yaml"
+{{ end }}
           env:
+            - name: KV_STORE_PATH
+              value: /tmp/kvstore.db
+            - name: SQL_STORE_PATH
+              value: /tmp/sql_store.db
+            - name: SQLITE_STORE_DIR
+              value: /tmp/llama-stack-files
             - name: HF_HOME
               value: /tmp/hf_cache
             - name: OTEL_SDK_DISABLED
               value: "true"
-            {{- if eq .Rhdh.Runtime.Platform "ocp"}}
+{{ if or (eq .Rhdh.Runtime.Platform "ocp") (pluginDependencyEnabled "okp") }}
             - name: OKP_SERVICE_URL
-              value: "http://lightspeed-okp-{{.Rhdh.Name}}-{{.Rhdh.Namespace}}.{{.Rhdh.Runtime.IngressDomain}}"
-            {{- end}}
+              value: {{ if eq .Rhdh.Runtime.Platform "ocp" }}{{ quote (printf "https://%s-ia-okp-%s.%s" .Rhdh.Name .Rhdh.Namespace .Rhdh.Runtime.IngressDomain) }}{{ else if isTrue (pluginDependencyValue "okp" "OKP_INGRESS_TLS_ENABLED") }}{{ quote (printf "https://%s" (required "OKP_INGRESS_HOST is required when the okp plugin dependency ConfigMap is referenced" (pluginDependencyValue "okp" "OKP_INGRESS_HOST"))) }}{{ else }}{{ quote (printf "http://%s" (required "OKP_INGRESS_HOST is required when the okp plugin dependency ConfigMap is referenced" (pluginDependencyValue "okp" "OKP_INGRESS_HOST"))) }}{{ end }}
+{{ end }}
           volumeMounts:
             - mountPath: /tmp
               name: lightspeed-data

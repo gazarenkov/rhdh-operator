@@ -60,7 +60,63 @@ fetch_upstream_file() {
 }
 
 indent_file() {
-    sed 's/^/    /' "$1"
+    sed -e 's/[[:space:]]*$//' -e '/^$/! s/^/    /' "$1"
+}
+
+render_stack_config() {
+    local source_file="$1"
+    local destination_file="$2"
+
+    awk '
+        BEGIN {
+            in_rag = 0
+            rag_blocks = 0
+        }
+
+        !in_rag && /^rag:[[:space:]]*$/ {
+            print "{{ if or (eq .Rhdh.Runtime.Platform \"ocp\") (pluginDependencyEnabled \"okp\") }}"
+            in_rag = 1
+            rag_blocks++
+        }
+
+        in_rag && !/^rag:[[:space:]]*$/ && /^[^[:space:]#][^:]*:/ {
+            print "{{ end }}"
+            in_rag = 0
+        }
+
+        { print }
+
+        END {
+            if (in_rag) {
+                print "{{ end }}"
+            }
+            if (rag_blocks != 1) {
+                printf "expected exactly one top-level rag block, found %d\n", rag_blocks > "/dev/stderr"
+                exit 1
+            }
+        }
+    ' "$source_file" > "$destination_file"
+}
+
+escape_go_template_literals() {
+    local source_file="$1"
+    local destination_file="$2"
+
+    awk '
+        function escape_actions(line, result, rest, token, inner) {
+            result = ""
+            rest = line
+            while (match(rest, /\{\{[^{}]*\}\}/)) {
+                token = substr(rest, RSTART, RLENGTH)
+                inner = substr(token, 3, length(token) - 4)
+                result = result substr(rest, 1, RSTART - 1) "{{ \"{{\" }}" inner "{{ \"}}\" }}"
+                rest = substr(rest, RSTART + RLENGTH)
+            }
+            return result rest
+        }
+
+        { print escape_actions($0) }
+    ' "$source_file" > "$destination_file"
 }
 
 # Upstream env keys that are not user Secret fields.
@@ -176,6 +232,8 @@ main() {
     local stack_file="${TMP_DIR}/lightspeed-stack.yaml"
     local profile_file="${TMP_DIR}/rhdh-profile.py"
     local env_file="${TMP_DIR}/default-values.env"
+    local rendered_stack="${TMP_DIR}/lightspeed-stack-rendered.yaml"
+    local rendered_profile="${TMP_DIR}/rhdh-profile-rendered.py"
     local stack_block="${TMP_DIR}/stack-block.yaml"
     local profile_block="${TMP_DIR}/profile-block.yaml"
     local secret_entries="${TMP_DIR}/secret-entries.yaml"
@@ -184,8 +242,10 @@ main() {
     fetch_upstream_file "$UPSTREAM_PROFILE_PATH" "$profile_file"
     fetch_upstream_file "$UPSTREAM_ENV_PATH" "$env_file"
 
-    indent_file "$stack_file" > "$stack_block"
-    indent_file "$profile_file" > "$profile_block"
+    render_stack_config "$stack_file" "$rendered_stack"
+    escape_go_template_literals "$profile_file" "$rendered_profile"
+    indent_file "$rendered_stack" > "$stack_block"
+    indent_file "$rendered_profile" > "$profile_block"
     render_secret_entries "$env_file" > "$secret_entries"
 
     replace_indented_block "$CONFIGMAP_FILE" "  lightspeed-stack.yaml: |" 4 "$stack_block"

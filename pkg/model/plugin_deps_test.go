@@ -6,8 +6,11 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/redhat-developer/rhdh-operator/api"
+	"github.com/redhat-developer/rhdh-operator/pkg/platform"
+	"github.com/redhat-developer/rhdh-operator/pkg/template"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -281,6 +284,79 @@ func TestMatchesPlatform(t *testing.T) {
 			}
 			got := matchesPlatform(obj, tt.platformExt)
 			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func TestReadOKPPluginDeps(t *testing.T) {
+	pluginDepsDir, err := filepath.Abs("../../config/profile/rhdh/plugin-deps")
+	require.NoError(t, err)
+
+	backstage := &api.Backstage{ObjectMeta: metav1.ObjectMeta{Name: "developer-hub", Namespace: "rhdh-test"}}
+	tests := []struct {
+		name           string
+		platform       platform.Platform
+		externalConfig ExternalConfig
+		enabled        []string
+		wantKinds      []string
+	}{
+		{
+			name:      "kubernetes without opt-in has no OKP resources",
+			platform:  platform.Kubernetes,
+			enabled:   nil,
+			wantKinds: nil,
+		},
+		{
+			name:     "kubernetes opt-in creates deployment service and ingress",
+			platform: platform.Kubernetes,
+			externalConfig: ExternalConfig{PluginDependencyConfigs: map[string]map[string]string{
+				"okp": {
+					"OKP_INGRESS_HOST":            "okp.example.com",
+					"OKP_INGRESS_CLASS_NAME":      "nginx",
+					"OKP_INGRESS_TLS_ENABLED":     "true",
+					"OKP_INGRESS_TLS_SECRET_NAME": "okp-tls",
+				},
+			}},
+			enabled:   []string{"okp"},
+			wantKinds: []string{"Deployment", "Service", "Ingress"},
+		},
+		{
+			name:     "openshift creates deployment route and service automatically",
+			platform: platform.OpenShift,
+			externalConfig: ExternalConfig{
+				OpenShiftIngressDomain: "apps.example.com",
+			},
+			enabled:   []string{"okp"},
+			wantKinds: []string{"Deployment", "Route", "Service"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			template.SetTemplateData(backstage, &tt.platform, &tt.externalConfig)
+			objects, err := ReadPluginDeps(pluginDepsDir, backstage.Name, backstage.Namespace, tt.enabled, tt.platform.Extension)
+			require.NoError(t, err)
+
+			kinds := make([]string, 0, len(objects))
+			for _, object := range objects {
+				kinds = append(kinds, object.GetKind())
+				assert.Equal(t, "developer-hub-ia-okp", object.GetName())
+			}
+			assert.ElementsMatch(t, tt.wantKinds, kinds)
+
+			if tt.name == "kubernetes opt-in creates deployment service and ingress" {
+				for _, object := range objects {
+					if object.GetKind() != "Ingress" {
+						continue
+					}
+					rules, found, nestedErr := unstructured.NestedSlice(object.Object, "spec", "rules")
+					require.NoError(t, nestedErr)
+					require.True(t, found)
+					require.NotEmpty(t, rules)
+					host := rules[0].(map[string]interface{})["host"].(string)
+					assert.Equal(t, "okp.example.com", host)
+				}
+			}
 		})
 	}
 }

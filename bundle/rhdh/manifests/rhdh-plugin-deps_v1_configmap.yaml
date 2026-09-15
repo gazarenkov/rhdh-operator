@@ -13,6 +13,149 @@ data:
         server: '*'
       sourceRepos:
       - '*'
+  okp.yaml: |
+    # OKP (Offline Knowledge Portal) standalone Deployment.
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: {{backstage-name}}-ia-okp
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app.kubernetes.io/name: {{backstage-name}}-ia-okp
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: {{backstage-name}}-ia-okp
+        spec:
+          automountServiceAccountToken: false
+          containers:
+            - name: okp
+              image: registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:1.2.12-1788274041
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                allowPrivilegeEscalation: false
+                runAsNonRoot: true
+    {{ if eq .Rhdh.Runtime.Platform "k8s" }}
+                runAsUser: 1001
+    {{ end }}
+                capabilities:
+                  drop:
+                    - ALL
+                seccompProfile:
+                  type: RuntimeDefault
+              command:
+                - /bin/bash
+                - -c
+              args:
+                - |
+                  /opt/solr/bin/solr start --user-managed --force -m 1g
+                  rm -f /etc/httpd/conf.d/ssl.conf
+                  exec httpd -D FOREGROUND
+              ports:
+                - name: httpd
+                  containerPort: 8080
+                  protocol: TCP
+                - name: solr
+                  containerPort: 8983
+                  protocol: TCP
+              env:
+                - name: SOLR_HOST_BIND
+                  value: "0.0.0.0"
+                - name: MIMIR_HTTPD_SERVER_NAME
+                  value: "localhost"
+                - name: COMPRESSED
+                  value: "true"
+                - name: ENCRYPT
+                  value: "false"
+              resources:
+                requests:
+                  cpu: 200m
+                  memory: 2Gi
+                limits:
+                  cpu: "2"
+                  memory: 4Gi
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: httpd
+                initialDelaySeconds: 10
+                periodSeconds: 10
+              livenessProbe:
+                tcpSocket:
+                  port: solr
+                initialDelaySeconds: 30
+                periodSeconds: 30
+    ---
+    # OKP public endpoint on OpenShift.
+    apiVersion: route.openshift.io/v1
+    kind: Route
+    metadata:
+      name: {{backstage-name}}-ia-okp
+      annotations:
+        rhdh.redhat.com/platform: ocp
+    spec:
+      to:
+        kind: Service
+        name: {{backstage-name}}-ia-okp
+      port:
+        targetPort: httpd
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+    ---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: {{backstage-name}}-ia-okp
+    spec:
+      type: ClusterIP
+      selector:
+        app.kubernetes.io/name: {{backstage-name}}-ia-okp
+      ports:
+        - name: httpd
+          port: 8080
+          targetPort: httpd
+          protocol: TCP
+        - name: solr
+          port: 8983
+          targetPort: solr
+          protocol: TCP
+    {{ if eq .Rhdh.Runtime.Platform "k8s" }}
+    ---
+    # OKP public endpoint on Kubernetes. The referenced plugin dependency ConfigMap
+    # supplies the cluster-specific hostname, Ingress class, and TLS settings.
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: {{backstage-name}}-ia-okp
+      annotations:
+        rhdh.redhat.com/platform: k8s
+    spec:
+    {{ if pluginDependencyValue "okp" "OKP_INGRESS_CLASS_NAME" }}
+      ingressClassName: {{ quote (pluginDependencyValue "okp" "OKP_INGRESS_CLASS_NAME") }}
+    {{ end }}
+    {{ if isTrue (pluginDependencyValue "okp" "OKP_INGRESS_TLS_ENABLED") }}
+      tls:
+        - hosts:
+            - {{ quote (required "OKP_INGRESS_HOST is required when the okp plugin dependency ConfigMap is referenced" (pluginDependencyValue "okp" "OKP_INGRESS_HOST")) }}
+    {{ if pluginDependencyValue "okp" "OKP_INGRESS_TLS_SECRET_NAME" }}
+          secretName: {{ quote (pluginDependencyValue "okp" "OKP_INGRESS_TLS_SECRET_NAME") }}
+    {{ end }}
+    {{ end }}
+      rules:
+        - host: {{ quote (required "OKP_INGRESS_HOST is required when the okp plugin dependency ConfigMap is referenced" (pluginDependencyValue "okp" "OKP_INGRESS_HOST")) }}
+          http:
+            paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: {{backstage-name}}-ia-okp
+                    port:
+                      name: httpd
+    {{ end }}
   sonataflow.yaml: |
     apiVersion: batch/v1
     kind: Job
