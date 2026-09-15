@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/redhat-developer/rhdh-operator/api"
+	"github.com/redhat-developer/rhdh-operator/pkg/template"
 	"github.com/redhat-developer/rhdh-operator/pkg/utils"
 
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -95,9 +96,13 @@ func ReadPluginDeps(rootDir, bsName, bsNamespace string, enabled []string, platf
 		// See template.ApplyTemplate() for the new implementation.
 		modifiedContent := strings.ReplaceAll(string(content), "{{backstage-name}}", bsName)
 		modifiedContent = strings.ReplaceAll(modifiedContent, "{{backstage-ns}}", bsNamespace)
+		templatedContent, err := template.ApplyTemplate([]byte(modifiedContent))
+		if err != nil {
+			return nil, fmt.Errorf("failed to apply template to plugin dependency %s: %w", file, err)
+		}
 
 		// Parse the modified content
-		objs, err := utils.ReadYamlContent(modifiedContent)
+		objs, err := utils.ReadYamlContent(string(templatedContent))
 
 		if err != nil {
 			return nil, fmt.Errorf("failed to read YAML file %s: %w", file, err)

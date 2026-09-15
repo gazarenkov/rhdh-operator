@@ -8,9 +8,11 @@ import (
 	"gopkg.in/yaml.v2"
 
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 
 	"github.com/redhat-developer/rhdh-operator/api"
+	"github.com/redhat-developer/rhdh-operator/pkg/platform"
 	"github.com/redhat-developer/rhdh-operator/pkg/template"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -285,9 +287,9 @@ func TestTemplateSubstitution_DefaultConfig(t *testing.T) {
 
 	// Set template data
 	template.SetTemplateData(
-		&template.MockBackstageCR{Name: "test-backstage", Namespace: "test-ns"},
-		&template.MockPlatform{Extension: "kubernetes"},
-		&template.MockExternalConfig{IngressDomain: ""},
+		&api.Backstage{ObjectMeta: metav1.ObjectMeta{Name: "test-backstage", Namespace: "test-ns"}},
+		&platform.Kubernetes,
+		&ExternalConfig{},
 	)
 
 	scheme := runtime.NewScheme()
@@ -314,9 +316,9 @@ func TestTemplateSubstitution_Flavour(t *testing.T) {
 
 	// Set template data
 	template.SetTemplateData(
-		&template.MockBackstageCR{Name: "my-instance", Namespace: "my-ns"},
-		&template.MockPlatform{Extension: "kubernetes"},
-		&template.MockExternalConfig{IngressDomain: ""},
+		&api.Backstage{ObjectMeta: metav1.ObjectMeta{Name: "my-instance", Namespace: "my-ns"}},
+		&platform.Kubernetes,
+		&ExternalConfig{},
 	)
 
 	scheme := runtime.NewScheme()

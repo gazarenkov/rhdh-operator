@@ -7,18 +7,21 @@ import (
 
 const ExtConfigSyncLabel = "rhdh.redhat.com/ext-config-sync"
 const BackstageNameAnnotation = "rhdh.redhat.com/backstage-name"
+const PluginDependencyConfigLabel = "rhdh.redhat.com/plugin-dependency"
 
 type ExternalConfig struct {
-	RawConfig              map[string]string
-	DynamicPlugins         corev1.ConfigMap
-	AppConfigKeys          map[string][]string
-	ExtraFileConfigMapKeys map[string]DataObjectKeys
-	ExtraFileSecretKeys    map[string]DataObjectKeys
-	ExtraEnvConfigMapKeys  map[string]DataObjectKeys
-	ExtraEnvSecretKeys     map[string]DataObjectKeys
-	ExtraPvcKeys           []string
+	RawConfig               map[string]string
+	DynamicPlugins          corev1.ConfigMap
+	AppConfigKeys           map[string][]string
+	ExtraFileConfigMapKeys  map[string]DataObjectKeys
+	ExtraFileSecretKeys     map[string]DataObjectKeys
+	ExtraEnvConfigMapKeys   map[string]DataObjectKeys
+	ExtraEnvSecretKeys      map[string]DataObjectKeys
+	ExtraPvcKeys            []string
+	PluginDependencyConfigs map[string]map[string]string
 
-	OpenShiftIngressDomain string
+	OpenShiftIngressDomain   string
+	OpenShiftIngressCABundle string
 
 	WatchingHash string
 }
@@ -26,14 +29,15 @@ type ExternalConfig struct {
 func NewExternalConfig() ExternalConfig {
 
 	return ExternalConfig{
-		RawConfig:              map[string]string{},
-		DynamicPlugins:         corev1.ConfigMap{},
-		AppConfigKeys:          map[string][]string{},
-		ExtraFileConfigMapKeys: map[string]DataObjectKeys{},
-		ExtraFileSecretKeys:    map[string]DataObjectKeys{},
-		ExtraEnvConfigMapKeys:  map[string]DataObjectKeys{},
-		ExtraEnvSecretKeys:     map[string]DataObjectKeys{},
-		ExtraPvcKeys:           []string{},
+		RawConfig:               map[string]string{},
+		DynamicPlugins:          corev1.ConfigMap{},
+		AppConfigKeys:           map[string][]string{},
+		ExtraFileConfigMapKeys:  map[string]DataObjectKeys{},
+		ExtraFileSecretKeys:     map[string]DataObjectKeys{},
+		ExtraEnvConfigMapKeys:   map[string]DataObjectKeys{},
+		ExtraEnvSecretKeys:      map[string]DataObjectKeys{},
+		ExtraPvcKeys:            []string{},
+		PluginDependencyConfigs: map[string]map[string]string{},
 
 		WatchingHash: "",
 	}
@@ -58,4 +62,13 @@ func (k DataObjectKeys) All() []string {
 // GetIngressDomain returns the OpenShift ingress domain (empty on k8s or if unavailable)
 func (e ExternalConfig) GetIngressDomain() string {
 	return e.OpenShiftIngressDomain
+}
+
+// GetIngressCABundle returns the OpenShift ingress certificate bundle (empty on k8s or if unavailable)
+func (e ExternalConfig) GetIngressCABundle() string {
+	return e.OpenShiftIngressCABundle
+}
+
+func (e ExternalConfig) GetPluginDependencyConfigs() map[string]map[string]string {
+	return e.PluginDependencyConfigs
 }
